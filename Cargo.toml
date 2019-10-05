@@ -7,3 +7,7 @@ edition = "2018"
 [dependencies]
 futures = "0.1"
 either = "1.5"
+
+[dev-dependencies]
+tokio01 = { package = "tokio", version = "0.1" }
+tokio02 = { package = "tokio", version = "0.2.0-alpha" }

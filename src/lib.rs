@@ -86,4 +86,76 @@ mod tests {
     fn it_works() {
         assert_eq!(2 + 2, 4);
     }
+
+    use super::*;
+    use either::Either;
+
+    struct ValueFuture<Type>(Option<Type>)
+    where
+        Type: Unpin;
+
+    impl<Type> ValueFuture<Type>
+    where
+        Type: Unpin,
+    {
+        fn new(value: Type) -> ValueFuture<Type> {
+            ValueFuture(Some(value))
+        }
+    }
+
+    impl<Type> std::future::Future for ValueFuture<Type>
+    where
+        Type: Unpin,
+    {
+        type Output = Type;
+
+        fn poll(self: Pin<&mut Self>, _context: &mut Context<'_>) -> Poll<Self::Output> {
+            Poll::Ready(
+                Pin::into_inner(self)
+                    .0
+                    .take()
+                    .expect("ValueFuture has already resolved."),
+            )
+        }
+    }
+
+    #[test]
+    fn should_run_left_futures_future() {
+        let either = Either::<_, futures::future::FutureResult<(), ()>>::Left(
+            futures::future::ok::<_, ()>(42),
+        );
+        let either_future = EitherFuture::from(either);
+
+        let mut runtime = tokio01::runtime::Runtime::new().expect("Failed to create runtime.");
+        assert_eq!(Either::Left(42), runtime.block_on(either_future).unwrap());
+    }
+
+    #[test]
+    fn should_run_right_futures_future() {
+        let either = Either::<futures::future::FutureResult<(), ()>, _>::Right(
+            futures::future::ok::<_, ()>(42),
+        );
+        let either_future = EitherFuture::from(either);
+
+        let mut runtime = tokio01::runtime::Runtime::new().expect("Failed to create runtime.");
+        assert_eq!(Either::Right(42), runtime.block_on(either_future).unwrap());
+    }
+
+    #[test]
+    fn should_run_left_std_future() {
+        let either = Either::<_, ValueFuture<()>>::Left(ValueFuture::new(42));
+        let either_future = EitherFuture::from(either);
+
+        let runtime = tokio02::runtime::Runtime::new().expect("Failed to create runtime.");
+        assert_eq!(Either::Left(42), runtime.block_on(either_future));
+    }
+
+    #[test]
+    fn should_run_right_std_future() {
+        let either = Either::<ValueFuture<()>, _>::Right(ValueFuture::new(42));
+        let either_future = EitherFuture::from(either);
+
+        let runtime = tokio02::runtime::Runtime::new().expect("Failed to create runtime.");
+        assert_eq!(Either::Right(42), runtime.block_on(either_future));
+    }
 }

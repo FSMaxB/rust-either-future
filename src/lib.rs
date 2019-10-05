@@ -20,6 +20,14 @@ impl<LeftFuture, RightFuture> DerefMut for EitherFuture<LeftFuture, RightFuture>
     }
 }
 
+impl<LeftFuture, RightFuture> From<Either<LeftFuture, RightFuture>>
+    for EitherFuture<LeftFuture, RightFuture>
+{
+    fn from(either: Either<LeftFuture, RightFuture>) -> Self {
+        EitherFuture(either)
+    }
+}
+
 impl<Left, Right, ErrorType, LeftFuture, RightFuture> futures::Future
     for EitherFuture<LeftFuture, RightFuture>
 where

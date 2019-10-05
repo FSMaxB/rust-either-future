@@ -1,9 +1,24 @@
 use either::Either;
 use futures::Async;
+use std::ops::{Deref, DerefMut};
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
 pub struct EitherFuture<LeftFuture, RightFuture>(Either<LeftFuture, RightFuture>);
+
+impl<LeftFuture, RightFuture> Deref for EitherFuture<LeftFuture, RightFuture> {
+    type Target = Either<LeftFuture, RightFuture>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+impl<LeftFuture, RightFuture> DerefMut for EitherFuture<LeftFuture, RightFuture> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.0
+    }
+}
 
 impl<Left, Right, ErrorType, LeftFuture, RightFuture> futures::Future
     for EitherFuture<LeftFuture, RightFuture>

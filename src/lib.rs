@@ -26,6 +26,16 @@ use std::task::{Context, Poll};
 
 pub struct EitherFuture<LeftFuture, RightFuture>(Either<LeftFuture, RightFuture>);
 
+impl<LeftFuture, RightFuture> EitherFuture<LeftFuture, RightFuture> {
+	pub fn left(left_future: LeftFuture) -> Self {
+		Self(Either::Left(left_future))
+	}
+
+	pub fn right(right_future: RightFuture) -> Self {
+		Self(Either::Right(right_future))
+	}
+}
+
 impl<LeftFuture, RightFuture> Deref for EitherFuture<LeftFuture, RightFuture> {
 	type Target = Either<LeftFuture, RightFuture>;
 

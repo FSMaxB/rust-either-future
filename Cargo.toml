@@ -3,6 +3,12 @@ name = "either-future"
 version = "0.1.0"
 authors = ["Max Bruckner <max@maxbruckner.de>"]
 edition = "2018"
+license = "ISC"
+homepage = "https://github.com/FSMaxB/rust-either-future"
+repository = "https://github.com/FSMaxB/rust-either-future"
+keywords = ["future", "either"]
+description = "An implementation of Future for Either<impl Future, impl Future>."
+readme = "README.md"
 
 [dependencies]
 either = "1.5"

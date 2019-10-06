@@ -1,7 +1,10 @@
 use either::Either;
+#[cfg(feature = "futures_future")]
 use futures::Async;
 use std::ops::{Deref, DerefMut};
+#[cfg(feature = "std_future")]
 use std::pin::Pin;
+#[cfg(feature = "std_future")]
 use std::task::{Context, Poll};
 
 pub struct EitherFuture<LeftFuture, RightFuture>(Either<LeftFuture, RightFuture>);
@@ -28,6 +31,7 @@ impl<LeftFuture, RightFuture> From<Either<LeftFuture, RightFuture>>
     }
 }
 
+#[cfg(feature = "futures_future")]
 impl<Left, Right, ErrorType, LeftFuture, RightFuture> futures::Future
     for EitherFuture<LeftFuture, RightFuture>
 where
@@ -52,6 +56,7 @@ where
     }
 }
 
+#[cfg(feature = "std_future")]
 impl<Left, Right, LeftFuture, RightFuture> std::future::Future
     for EitherFuture<LeftFuture, RightFuture>
 where
@@ -92,12 +97,15 @@ where
 mod tests {
     use super::*;
     use either::Either;
+    #[cfg(feature = "std_future")]
     use std::marker::PhantomPinned;
 
+    #[cfg(feature = "std_future")]
     struct ValueFuture<Type>(Option<Type>)
     where
         Type: Unpin;
 
+    #[cfg(feature = "std_future")]
     impl<Type> ValueFuture<Type>
     where
         Type: Unpin,
@@ -107,6 +115,7 @@ mod tests {
         }
     }
 
+    #[cfg(feature = "std_future")]
     impl<Type> std::future::Future for ValueFuture<Type>
     where
         Type: Unpin,
@@ -123,10 +132,12 @@ mod tests {
         }
     }
 
+    #[cfg(feature = "std_future")]
     struct NotPinFuture {
         _phantom: PhantomPinned,
     }
 
+    #[cfg(feature = "std_future")]
     impl std::future::Future for NotPinFuture {
         type Output = ();
 
@@ -136,6 +147,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "futures_future")]
     fn should_run_left_futures_future() {
         let either = Either::<_, futures::future::FutureResult<(), ()>>::Left(
             futures::future::ok::<_, ()>(42),
@@ -147,6 +159,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "futures_future")]
     fn should_run_right_futures_future() {
         let either = Either::<futures::future::FutureResult<(), ()>, _>::Right(
             futures::future::ok::<_, ()>(42),
@@ -158,6 +171,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "std_future")]
     fn should_run_left_std_future() {
         let either = Either::<_, ValueFuture<()>>::Left(ValueFuture::new(42));
         let either_future = EitherFuture::from(either);
@@ -167,6 +181,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "std_future")]
     fn should_run_right_std_future() {
         let either = Either::<ValueFuture<()>, _>::Right(ValueFuture::new(42));
         let either_future = EitherFuture::from(either);
@@ -176,6 +191,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "std-future")]
     fn should_work_with_unpin() {
         let either = Either::<_,NotPinFuture>::Left(ValueFuture::new(42));
         let either_future = EitherFuture::from(either);

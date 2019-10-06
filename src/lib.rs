@@ -92,6 +92,7 @@ where
 mod tests {
     use super::*;
     use either::Either;
+    use std::marker::PhantomPinned;
 
     struct ValueFuture<Type>(Option<Type>)
     where
@@ -119,6 +120,18 @@ mod tests {
                     .take()
                     .expect("ValueFuture has already resolved."),
             )
+        }
+    }
+
+    struct NotPinFuture {
+        _phantom: PhantomPinned,
+    }
+
+    impl std::future::Future for NotPinFuture {
+        type Output = ();
+
+        fn poll(self: Pin<&mut Self>, _context: &mut Context<'_>) -> Poll<Self::Output> {
+            Poll::Ready(())
         }
     }
 
@@ -160,5 +173,14 @@ mod tests {
 
         let runtime = tokio02::runtime::Runtime::new().expect("Failed to create runtime.");
         assert_eq!(Either::Right(42), runtime.block_on(either_future));
+    }
+
+    #[test]
+    fn should_work_with_unpin() {
+        let either = Either::<_,NotPinFuture>::Left(ValueFuture::new(42));
+        let either_future = EitherFuture::from(either);
+
+        let runtime = tokio02::runtime::Runtime::new().expect("Failed to create runtime.");
+        assert_eq!(Either::Left(42), runtime.block_on(either_future));
     }
 }

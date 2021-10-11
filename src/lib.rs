@@ -1,26 +1,12 @@
-/*
- * either-future
- *
- * Copyright (C) 2019 Max Bruckner (FSMaxB)
- *
- * Permission to use, copy, modify, and/or distribute this software for any purpose with or without
- * fee is hereby granted, provided that the above copyright notice and this permission notice appear
- * in all copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS
- * SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
- * AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
- * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
- * NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
- * OF THIS SOFTWARE.
- */
+#![no_std]
 
+use core::future::Future;
+use core::ops::{Deref, DerefMut};
+use core::pin::Pin;
+use core::task::{Context, Poll};
 use either::Either;
 #[cfg(feature = "futures01")]
 use futures::Async;
-use std::ops::{Deref, DerefMut};
-use std::pin::Pin;
-use std::task::{Context, Poll};
 
 pub struct EitherFuture<LeftFuture, RightFuture>(Either<LeftFuture, RightFuture>);
 
@@ -78,10 +64,10 @@ where
 	}
 }
 
-impl<Left, Right, LeftFuture, RightFuture> std::future::Future for EitherFuture<LeftFuture, RightFuture>
+impl<Left, Right, LeftFuture, RightFuture> Future for EitherFuture<LeftFuture, RightFuture>
 where
-	LeftFuture: std::future::Future<Output = Left>,
-	RightFuture: std::future::Future<Output = Right>,
+	LeftFuture: Future<Output = Left>,
+	RightFuture: Future<Output = Right>,
 {
 	type Output = Either<Left, Right>;
 

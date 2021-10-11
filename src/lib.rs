@@ -16,12 +16,10 @@
  */
 
 use either::Either;
-#[cfg(feature = "futures_future")]
+#[cfg(feature = "futures01")]
 use futures::Async;
 use std::ops::{Deref, DerefMut};
-#[cfg(feature = "std_future")]
 use std::pin::Pin;
-#[cfg(feature = "std_future")]
 use std::task::{Context, Poll};
 
 pub struct EitherFuture<LeftFuture, RightFuture>(Either<LeftFuture, RightFuture>);
@@ -56,7 +54,7 @@ impl<LeftFuture, RightFuture> From<Either<LeftFuture, RightFuture>> for EitherFu
 	}
 }
 
-#[cfg(feature = "futures_future")]
+#[cfg(feature = "futures01")]
 impl<Left, Right, ErrorType, LeftFuture, RightFuture> futures::Future for EitherFuture<LeftFuture, RightFuture>
 where
 	LeftFuture: futures::Future<Item = Left, Error = ErrorType>,
@@ -80,7 +78,6 @@ where
 	}
 }
 
-#[cfg(feature = "std_future")]
 impl<Left, Right, LeftFuture, RightFuture> std::future::Future for EitherFuture<LeftFuture, RightFuture>
 where
 	LeftFuture: std::future::Future<Output = Left>,

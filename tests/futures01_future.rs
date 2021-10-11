@@ -1,4 +1,4 @@
-#![cfg(feature = "futures_future")]
+#![cfg(feature = "futures01")]
 use either::Either;
 use either_future::EitherFuture;
 use futures::executor::spawn;

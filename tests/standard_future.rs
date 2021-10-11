@@ -1,5 +1,3 @@
-#![cfg(feature = "std_future")]
-
 use either::Either;
 use either_future::EitherFuture;
 use futures_lite::future::block_on;
@@ -40,7 +38,6 @@ struct NotPinFuture {
 	_phantom: PhantomPinned,
 }
 
-#[cfg(feature = "std_future")]
 impl std::future::Future for NotPinFuture {
 	type Output = ();
 

@@ -5,8 +5,9 @@ use core::ops::{Deref, DerefMut};
 use core::pin::Pin;
 use core::task::{Context, Poll};
 use either::Either;
+
 #[cfg(feature = "futures01")]
-use futures::Async;
+mod futures01;
 
 pub struct EitherFuture<LeftFuture, RightFuture>(Either<LeftFuture, RightFuture>);
 
@@ -37,30 +38,6 @@ impl<LeftFuture, RightFuture> DerefMut for EitherFuture<LeftFuture, RightFuture>
 impl<LeftFuture, RightFuture> From<Either<LeftFuture, RightFuture>> for EitherFuture<LeftFuture, RightFuture> {
 	fn from(either: Either<LeftFuture, RightFuture>) -> Self {
 		EitherFuture(either)
-	}
-}
-
-#[cfg(feature = "futures01")]
-impl<Left, Right, ErrorType, LeftFuture, RightFuture> futures::Future for EitherFuture<LeftFuture, RightFuture>
-where
-	LeftFuture: futures::Future<Item = Left, Error = ErrorType>,
-	RightFuture: futures::Future<Item = Right, Error = ErrorType>,
-{
-	type Item = Either<Left, Right>;
-	type Error = ErrorType;
-
-	fn poll(&mut self) -> Result<Async<Self::Item>, Self::Error> {
-		let either = match self.0.as_mut() {
-			Either::Left(left_future) => match left_future.poll()? {
-				Async::Ready(left) => Either::Left(left),
-				Async::NotReady => return Ok(Async::NotReady),
-			},
-			Either::Right(right_future) => match right_future.poll()? {
-				Async::Ready(right) => Either::Right(right),
-				Async::NotReady => return Ok(Async::NotReady),
-			},
-		};
-		Ok(Async::Ready(either))
 	}
 }
 

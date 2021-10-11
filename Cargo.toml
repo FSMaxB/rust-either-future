@@ -16,7 +16,7 @@ futures = {version = "0.1", optional = true}
 
 [dev-dependencies]
 tokio01 = { package = "tokio", version = "0.1" }
-tokio02 = { package = "tokio", version = "0.2.0-alpha"}
+futures-lite = "1"
 
 [features]
 default = ["std_future", "futures_future"]

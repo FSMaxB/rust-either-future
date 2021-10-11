@@ -76,7 +76,7 @@ where
 				Async::NotReady => return Ok(Async::NotReady),
 			},
 		};
-		return Ok(Async::Ready(either));
+		Ok(Async::Ready(either))
 	}
 }
 

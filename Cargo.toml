@@ -19,5 +19,6 @@ futures-lite = "1"
 futures = {version = "0.1", default-features = false, features = ["use_std"]}
 
 [features]
-default = []
+default = ["std_future"]
 futures01 = ["futures"]
+std_future = []

@@ -5,4 +5,6 @@ either-future
 
 It is both implemented for `futures::Future` (0.1) and `core::future::Future`.
 
-`futues::Future` is behind the feature flag `futures01`
+## Features
+`futures01`: Implement `futues::Future`
+`std_future`: Implement `core::future::Future`, enabled by default

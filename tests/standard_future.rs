@@ -1,3 +1,4 @@
+#![cfg(feature = "std_future")]
 use either::Either;
 use either_future::EitherFuture;
 use futures_lite::future::block_on;

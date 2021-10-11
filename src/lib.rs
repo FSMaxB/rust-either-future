@@ -195,7 +195,7 @@ mod tests {
 		let either = Either::<_, ValueFuture<()>>::Left(ValueFuture::new(42));
 		let either_future = EitherFuture::from(either);
 
-		let runtime = tokio02::runtime::Runtime::new().expect("Failed to create runtime.");
+		let mut runtime = tokio02::runtime::Runtime::new().expect("Failed to create runtime.");
 		assert_eq!(Either::Left(42), runtime.block_on(either_future));
 	}
 
@@ -205,7 +205,7 @@ mod tests {
 		let either = Either::<ValueFuture<()>, _>::Right(ValueFuture::new(42));
 		let either_future = EitherFuture::from(either);
 
-		let runtime = tokio02::runtime::Runtime::new().expect("Failed to create runtime.");
+		let mut runtime = tokio02::runtime::Runtime::new().expect("Failed to create runtime.");
 		assert_eq!(Either::Right(42), runtime.block_on(either_future));
 	}
 

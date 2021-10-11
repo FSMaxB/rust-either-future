@@ -1,5 +1,7 @@
 #![no_std]
 
+extern crate either;
+
 use core::ops::{Deref, DerefMut};
 use either::Either;
 
@@ -12,11 +14,11 @@ pub struct EitherFuture<LeftFuture, RightFuture>(Either<LeftFuture, RightFuture>
 
 impl<LeftFuture, RightFuture> EitherFuture<LeftFuture, RightFuture> {
 	pub fn left(left_future: LeftFuture) -> Self {
-		Self(Either::Left(left_future))
+		EitherFuture(Either::Left(left_future))
 	}
 
 	pub fn right(right_future: RightFuture) -> Self {
-		Self(Either::Right(right_future))
+		EitherFuture(Either::Right(right_future))
 	}
 }
 

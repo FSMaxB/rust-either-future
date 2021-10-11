@@ -1,23 +1,14 @@
 #![cfg(feature = "std_future")]
 use either::Either;
 use either_future::EitherFuture;
-use futures_lite::future::block_on;
-use std::future::{ready, Ready};
+use std::future::Future;
 use std::marker::PhantomPinned;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
-struct NotPinFuture {
-	_phantom: PhantomPinned,
-}
+mod block_on;
 
-impl std::future::Future for NotPinFuture {
-	type Output = ();
-
-	fn poll(self: Pin<&mut Self>, _context: &mut Context<'_>) -> Poll<Self::Output> {
-		Poll::Ready(())
-	}
-}
+use block_on::block_on;
 
 #[test]
 fn should_run_left_future() {
@@ -41,4 +32,31 @@ fn should_work_with_unpin() {
 	let either_future = EitherFuture::from(either);
 
 	assert_eq!(Either::Left(42), block_on(either_future));
+}
+
+fn ready<T>(value: T) -> Ready<T> {
+	Ready(Some(value))
+}
+
+struct Ready<T>(Option<T>);
+
+impl<T: Unpin> Future for Ready<T> {
+	type Output = T;
+
+	fn poll(self: Pin<&mut Self>, _context: &mut Context<'_>) -> Poll<Self::Output> {
+		let value = self.get_mut().0.take().expect("Future is already finished.");
+		Poll::Ready(value)
+	}
+}
+
+struct NotPinFuture {
+	_phantom: PhantomPinned,
+}
+
+impl Future for NotPinFuture {
+	type Output = ();
+
+	fn poll(self: Pin<&mut Self>, _context: &mut Context<'_>) -> Poll<Self::Output> {
+		Poll::Ready(())
+	}
 }

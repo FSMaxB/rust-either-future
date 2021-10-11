@@ -15,7 +15,6 @@ either = "1"
 futures = {version = "0.1", optional = true, default-features = false}
 
 [dev-dependencies]
-futures-lite = "1"
 futures = {version = "0.1", default-features = false, features = ["use_std"]}
 
 [features]

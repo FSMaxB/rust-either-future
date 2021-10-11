@@ -1,4 +1,7 @@
-on: push
+on:
+  push: {}
+  schedule:
+    - cron: '42 7 * * Tue'  # Run every tuesday at 7:42
 env:
   CARGO_TERM_COLOR: always
 jobs:

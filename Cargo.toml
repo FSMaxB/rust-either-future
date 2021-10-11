@@ -12,11 +12,11 @@ readme = "README.md"
 
 [dependencies]
 either = "1"
-futures = {version = "0.1", optional = true}
+futures = {version = "0.1", optional = true, default-features = false}
 
 [dev-dependencies]
-tokio01 = { package = "tokio", version = "0.1" }
 futures-lite = "1"
+futures = {version = "0.1", default-features = false, features = ["use_std"]}
 
 [features]
 default = ["std_future", "futures_future"]

@@ -1,7 +1,7 @@
 either-future
 =============
 
-`EitherFuture` is a	`no_std` implementation of `Future` for `Either<impl Future, impl Future>`.
+`EitherFuture` is a	`no_std` implementation of `Future<Output = Either<Left, Right>` for `Either<LeftFuture, RightFuture>`.
 
 It is both implemented for `futures::Future` (0.1) and `core::future::Future`.
 

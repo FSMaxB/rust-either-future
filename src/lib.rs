@@ -9,6 +9,8 @@ use either::Either;
 pub mod future;
 #[cfg(feature = "futures01")]
 mod futures01;
+#[cfg(feature = "futures03")]
+mod futures03;
 
 pub struct EitherFuture<LeftFuture, RightFuture>(Either<LeftFuture, RightFuture>);
 

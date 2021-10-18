@@ -1,4 +1,9 @@
-# 1.0.0
+# Changelog
+
+## 1.1.0
+* Implement conversions to and from `futures_util::future::Either` behind the `futures03` feature flag
+
+## 1.0.0
 * Enable `std_future` by default
 * Rename `futures_future` to `futures01` and disable it by default
 * Support `no_std`

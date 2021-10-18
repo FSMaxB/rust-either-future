@@ -13,6 +13,7 @@ readme = "README.md"
 [dependencies]
 either = "1"
 futures = {version = "0.1", optional = true, default-features = false}
+futures-util = {version = "0.3", optional = true, default-features = false}
 
 [dev-dependencies]
 futures = {version = "0.1", default-features = false, features = ["use_std"]}
@@ -20,4 +21,5 @@ futures = {version = "0.1", default-features = false, features = ["use_std"]}
 [features]
 default = ["std_future"]
 futures01 = ["futures"]
+futures03 = ["futures-util"]
 std_future = []

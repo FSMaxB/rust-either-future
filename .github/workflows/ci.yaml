@@ -49,6 +49,20 @@ jobs:
           profile: minimal
       - name: Test
         run: cargo test --no-default-features --features futures01
+  test_futures03:
+    name: Test with futures 0.3
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install MSRV for futures 0.3
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: 1.41.0 # current MSRV for futures_util 0.3, see https://github.com/rust-lang/futures-rs/blob/0.3/.github/workflows/ci.yml
+          default: true
+          profile: minimal
+      - name: Test
+        run: cargo test --no-default-features --features futures03
   test_std_future:
     name: Test with core::future::Future
     runs-on: ubuntu-latest

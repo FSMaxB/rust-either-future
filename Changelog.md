@@ -1,6 +1,7 @@
 # Changelog
 
 ## 1.1.0
+* Make the `Either` in `EitherFuture` publicly accessible
 * Implement conversions to and from `futures_util::future::Either` behind the `futures03` feature flag
 
 ## 1.0.0

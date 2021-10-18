@@ -12,7 +12,7 @@ mod futures01;
 #[cfg(feature = "futures03")]
 mod futures03;
 
-pub struct EitherFuture<LeftFuture, RightFuture>(Either<LeftFuture, RightFuture>);
+pub struct EitherFuture<LeftFuture, RightFuture>(pub Either<LeftFuture, RightFuture>);
 
 impl<LeftFuture, RightFuture> EitherFuture<LeftFuture, RightFuture> {
 	pub fn left(left_future: LeftFuture) -> Self {

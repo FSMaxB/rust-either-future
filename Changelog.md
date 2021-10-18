@@ -3,6 +3,8 @@
 ## 1.1.0
 * Make the `Either` in `EitherFuture` publicly accessible
 * Implement conversions to and from `futures_util::future::Either` behind the `futures03` feature flag
+* Implement conversion from `EitherFuture` to `Either`
+  * With `futures03` feature, implements `From`, otherwise only `Into` because of the [relaxed orphan rule restrictions in 1.41.0](https://blog.rust-lang.org/2020/01/30/Rust-1.41.0.html#relaxed-restrictions-when-implementing-traits)
 
 ## 1.0.0
 * Enable `std_future` by default

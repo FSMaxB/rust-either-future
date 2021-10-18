@@ -43,3 +43,17 @@ impl<LeftFuture, RightFuture> From<Either<LeftFuture, RightFuture>> for EitherFu
 		EitherFuture(either)
 	}
 }
+
+#[cfg(not(feature = "futures03"))]
+impl<LeftFuture, RightFuture> Into<Either<LeftFuture, RightFuture>> for EitherFuture<LeftFuture, RightFuture> {
+	fn into(self) -> Either<LeftFuture, RightFuture> {
+		self.0
+	}
+}
+
+#[cfg(feature = "futures03")]
+impl<LeftFuture, RightFuture> From<EitherFuture<LeftFuture, RightFuture>> for Either<LeftFuture, RightFuture> {
+	fn from(either_future: EitherFuture<LeftFuture, RightFuture>) -> Either<LeftFuture, RightFuture> {
+		either_future.0
+	}
+}

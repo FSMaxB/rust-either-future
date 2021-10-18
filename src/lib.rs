@@ -6,7 +6,7 @@ use core::ops::{Deref, DerefMut};
 use either::Either;
 
 #[cfg(feature = "std_future")]
-pub mod future;
+mod future;
 #[cfg(feature = "futures01")]
 mod futures01;
 #[cfg(feature = "futures03")]

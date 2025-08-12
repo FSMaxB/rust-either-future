@@ -9,6 +9,7 @@ repository = "https://github.com/FSMaxB/rust-either-future"
 keywords = ["future", "either", "no_std"]
 description = "An implementation of Future for Either<impl Future, impl Future>."
 readme = "README.md"
+rust-version = "1.41.0"
 
 [dependencies]
 either = "1"

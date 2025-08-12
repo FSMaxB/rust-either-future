@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.0
+* Drop support for `futures01` and `futures03`
+* Raise MSRV to `1.41.0`
+
 ## 1.1.0
 * Make the `Either` in `EitherFuture` publicly accessible
 * Implement conversions to and from `futures_util::future::Either` behind the `futures03` feature flag

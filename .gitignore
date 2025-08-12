@@ -1,5 +1,3 @@
 /target
 **/*.rs.bk
 .idea
-# Different for different rust versions, so needs to be ignored
-Cargo.lock

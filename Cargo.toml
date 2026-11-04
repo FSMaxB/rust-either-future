@@ -12,4 +12,4 @@ readme = "README.md"
 rust-version = "1.41.0"
 
 [dependencies]
-either = "1"
+either = { version = "1", default-features = false }
